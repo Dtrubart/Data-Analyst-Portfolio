@@ -30,6 +30,8 @@ Create the following columns:
   The total number of employees beneath each employee in the hierarchy
   (direct + indirect reports).
 
+[1.2.1 Excel Formula Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/0463af6b26604a2d466393dc2a0a30d5cd135798/1.2.1%20Excel%20Formula%20Solution%20Doc)
+
 ---
 
 
