@@ -32,6 +32,8 @@ Create the following columns:
 
 ---
 
+1.2.1 Excel Formula Solution Doc
+
 ## 2️⃣ Flatten the Stack
 
 ### Objective
