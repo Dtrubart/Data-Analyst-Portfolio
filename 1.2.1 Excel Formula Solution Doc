@@ -1,0 +1,58 @@
+# Org Chart Overhaul — Excel Formula Solution
+
+## Objective
+Reconstruct an organizational hierarchy using Excel formulas only, by mapping each employee’s chain of command and calculating both direct and total reports from a flat employee–manager table.
+
+This solution avoids helper columns, VBA, Power Query, or manual recursion, relying exclusively on modern dynamic array functions.
+
+---
+
+## Input Data
+- Source file: `OfficeSpace.csv`
+- Columns:
+  - **Employee Name**
+  - **Manager Name** (blank for top-level employees)
+
+The CSV is imported into Excel as a structured table.
+
+---
+
+## Output Columns
+This solution produces three calculated columns:
+
+1. **Reporting Hierarchy**  
+   Full chain of command from the top-level manager down to the employee.
+
+2. **Direct Reports**  
+   Number of employees that report directly to the employee.
+
+3. **Total Reports**  
+   Total number of employees under the employee, including indirect reports.
+
+---
+
+## Solution Overview
+Excel does not support native recursion, so the hierarchy is built by simulating iterative traversal using `SCAN` and `XLOOKUP`.
+
+The approach follows three key ideas:
+- Traverse upward from each employee to their manager repeatedly.
+- Reverse the collected hierarchy so it reads top-down.
+- Use text-based aggregation to count indirect relationships.
+
+All calculations are dynamic and update automatically when the data changes.
+
+---
+
+## 1) Reporting Hierarchy (Manager Drilldown)
+
+### Purpose
+Generate the full chain of command for each employee, from the highest-ranking manager down to the employee.
+
+### Logic
+- Start from the employee.
+- Iteratively look up their manager using `XLOOKUP`.
+- Stop when no manager is found.
+- Reverse the resulting list.
+- Concatenate the hierarchy using a readable delimiter.
+
+### Example Output
