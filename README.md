@@ -31,7 +31,9 @@ Create the following columns:
   (direct + indirect reports).
 
 [1.2.1 Excel Formula Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/0463af6b26604a2d466393dc2a0a30d5cd135798/1.2.1%20Excel%20Formula%20Solution%20Doc)
-
+[1.3.1 Power Query - Power Bi Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d9cb147c02776cd267e0dd3d7fcdc265fd16a7b8/1.3.1%20Power%20Query%20-%20Power%20Bi%20Solution%20Doc)
+[1.4.1 SQL Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d9cb147c02776cd267e0dd3d7fcdc265fd16a7b8/1.4.1%20SQL%20Solution%20Doc)
+[1.5.1 Python Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d9cb147c02776cd267e0dd3d7fcdc265fd16a7b8/1.5.1%20Python%20Solution%20Doc)
 ---
 
 
