@@ -31,7 +31,6 @@ Create the following columns:
   (direct + indirect reports).
 
 ---
-https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/76f2a104f09c2fe2a977f6a743776e415cd92faf/1.2.1%20Excel%20Formula%20Solution%20Doc
 
 
 ## 2️⃣ Flatten the Stack
