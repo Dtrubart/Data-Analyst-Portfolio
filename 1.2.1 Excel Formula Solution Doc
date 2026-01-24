@@ -1,9 +1,9 @@
 # Org Chart Overhaul — Excel Formula Solution
 
 ## Objective
-Reconstruct an organizational hierarchy using Excel formulas only, by mapping each employee’s chain of command and calculating both direct and total reports from a flat employee–manager table.
+Reconstruct an organizational hierarchy in Excel by deriving each employee’s chain of command and calculating both direct and total reports using **Excel formulas only**.
 
-This solution avoids helper columns, VBA, Power Query, or manual recursion, relying exclusively on modern dynamic array functions.
+This solution avoids helper columns, VBA, Power Query, or manual recursion, relying entirely on **modern dynamic array functions**.
 
 ---
 
@@ -18,41 +18,127 @@ The CSV is imported into Excel as a structured table.
 ---
 
 ## Output Columns
-This solution produces three calculated columns:
+The solution generates three calculated columns:
 
 1. **Reporting Hierarchy**  
-   Full chain of command from the top-level manager down to the employee.
+   Full chain of command from the highest-ranking manager down to the employee.
 
 2. **Direct Reports**  
    Number of employees that report directly to the employee.
 
 3. **Total Reports**  
-   Total number of employees under the employee, including indirect reports.
+   Total number of employees reporting under the employee, including indirect reports.
 
 ---
 
 ## Solution Overview
-Excel does not support native recursion, so the hierarchy is built by simulating iterative traversal using `SCAN` and `XLOOKUP`.
+Excel does not provide native recursion, so hierarchical traversal is simulated using iterative array evaluation.
 
-The approach follows three key ideas:
-- Traverse upward from each employee to their manager repeatedly.
-- Reverse the collected hierarchy so it reads top-down.
-- Use text-based aggregation to count indirect relationships.
+The solution follows three core ideas:
+- Iteratively traverse upward using `SCAN` and `XLOOKUP`
+- Reverse the collected hierarchy to display it top-down
+- Use text aggregation to infer indirect relationships
 
-All calculations are dynamic and update automatically when the data changes.
+All calculations are dynamic and automatically recalculate when the dataset changes.
 
 ---
 
 ## 1) Reporting Hierarchy (Manager Drilldown)
 
 ### Purpose
-Generate the full chain of command for each employee, from the highest-ranking manager down to the employee.
+Generate the complete chain of command for each employee, starting from the top-level manager and ending with the employee.
 
 ### Logic
 - Start from the employee.
-- Iteratively look up their manager using `XLOOKUP`.
+- Repeatedly look up the employee’s manager.
 - Stop when no manager is found.
-- Reverse the resulting list.
+- Reverse the order so the hierarchy reads top-down.
 - Concatenate the hierarchy using a readable delimiter.
 
 ### Example Output
+Bill Lumbergh > Linda M. Grayson > Dom Portwood > Peter Gibbons
+
+pgsql
+Copiar código
+
+### Formula (Excel – English Functions)
+```excel
+=LET(
+  heir,
+    SCAN(
+      [@[Employee Name]],
+      SEQUENCE(10),
+      LAMBDA(acu, val,
+        XLOOKUP(acu, [Employee Name], [Manager Name], 0, 0)
+      )
+    ),
+  fil,
+    FILTER(heir, heir<>0, ""),
+  ord,
+    SORTBY(fil, SEQUENCE(ROWS(fil)), -1),
+  TEXTJOIN(" > ", TRUE, ord, [@[Manager Name]], [@[Employee Name]])
+)
+Notes
+SEQUENCE(10) defines the maximum hierarchy depth.
+Increase this value if deeper organizational structures are expected.
+
+The formula is fully dynamic and updates automatically.
+
+2) Direct Reports
+Purpose
+Count how many employees report directly to a given employee.
+
+Logic
+Counts rows where the employee appears as a manager.
+
+Formula
+excel
+Copiar código
+=COUNTIFS([Manager Name], [@[Employee Name]])
+3) Total Reports
+Purpose
+Calculate the total number of employees reporting under a given employee, including both direct and indirect reports.
+
+Logic
+Use the Reporting Hierarchy column.
+
+Count how many hierarchy paths contain the employee’s name.
+
+Subtract one to exclude the employee’s own row.
+
+Formula
+excel
+Copiar código
+=COUNTIFS(
+  [Reporting Hierarchy],
+  "*" & [@[Employee Name]] & "*"
+) - 1
+Key Strengths
+Uses pure Excel formulas with no automation or scripts.
+
+Fully dynamic and easy to audit.
+
+Demonstrates advanced use of LET, SCAN, and dynamic arrays.
+
+Ideal for small to medium-sized organizational datasets.
+
+Limitations
+Maximum hierarchy depth must be predefined.
+
+Cycles in reporting relationships are not handled.
+
+Requires clean and consistent employee naming.
+
+Related Files
+📊 Excel Workbook: OrgChart_Excel.xlsx
+
+📄 Raw Data: OfficeSpace.csv
+
+When to Use This Approach
+This solution is best suited when:
+
+Excel is the primary analysis tool.
+
+Transparency and formula-based logic are preferred.
+
+Dataset size and hierarchy depth are manageable.
