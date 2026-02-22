@@ -61,19 +61,19 @@ Create the following columns:
 
 #### 1.3 Power BI – Power Query Solution
 - 📄 Documentation:  
-  [1.3.1 Power Query – Power BI Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d9cb147c02776cd267e0dd3d7fcdc265fd16a7b8/1.3.1%20Power%20Query%20-%20Power%20Bi%20Solution%20Doc)
+  [1.3.1 Power Query – Power BI Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d373f8b2ff64dd67b8d2a26ab92d3cd5f8032f48/1.3.1%20Power%20Query%20-%20Power%20Bi%20Solution%20Doc%20.md)
 - 📊 Power Query File:  
   [1.3.2 Power Query Solution](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/eb7d5b22cf3ed93728a4a49f64e262714fdd3106/1.3.2%20Excel%20Solution%20Power%20Query.xlsx)
 
 #### 1.4 SQL Solution
 - 📄 Documentation:  
-  [1.4.1 SQL Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d9cb147c02776cd267e0dd3d7fcdc265fd16a7b8/1.4.1%20SQL%20Solution%20Doc)
+  [1.4.1 SQL Solution Doc]( https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d373f8b2ff64dd67b8d2a26ab92d3cd5f8032f48/1.4.1%20SQL%20Solution%20Doc%20.md)
 - 🗄 SQL Script:  
   [1.4.2 SQL Solution](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/96948b32f992dbed5ee3487e687e3a7450d0a378/1.4.2%20SQL%20Solution.sql)
 
 #### 1.5 Python Solution
 - 📄 Documentation:  
-  [1.5.1 Python Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d9cb147c02776cd267e0dd3d7fcdc265fd16a7b8/1.5.1%20Python%20Solution%20Doc)
+  [1.5.1 Python Solution Doc]( https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d373f8b2ff64dd67b8d2a26ab92d3cd5f8032f48/1.5.1%20Python%20Solution%20Doc%20.md)
 - 🐍 Python Script:  
   [1.5.2 Python Solution](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/96948b32f992dbed5ee3487e687e3a7450d0a378/1.5.2%20Python%20Solution.py)
 
