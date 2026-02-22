@@ -1,1 +1,309 @@
+# 🏢 Org Chart Overhaul — SQL Solution  
+**MariaDB 10.4 (XAMPP)**  
+Recursive CTE + Aggregations
 
+---
+
+## 📌 Project Objective
+
+Transform a flat **employee–manager** table into an analytics-ready organizational view.
+
+Most HR/ERP exports store data like this:
+
+| employee_name | manager_name |
+|--------------|--------------|
+| Ana          | Maria        |
+| John         | Ana          |
+| Maria        | NULL         |
+
+This format is not ideal for analytics because it does not directly provide:
+
+- Full reporting chains  
+- Number of direct reports  
+- Total span of control (direct + indirect reports)
+
+---
+
+## 🎯 Final Outputs
+
+The query produces:
+
+| Column | Description |
+|--------|------------|
+| `reporting_hierarchy` | Full path: `Top Manager > … > Employee` |
+| `direct_reports` | Immediate reports count |
+| `total_reports` | All descendants (direct + indirect) |
+
+---
+
+## 🧠 Conceptual Approach
+
+The solution is built in **4 structured phases**:
+
+1. Data normalization  
+2. Recursive hierarchy generation  
+3. Direct reports calculation  
+4. Total reports calculation  
+
+---
+
+# 🔹 Phase 0 — Data Normalization
+
+### 🎯 Purpose
+Ensure consistent string matching and valid hierarchy roots.
+
+### What it does
+- Trims whitespace
+- Converts empty manager values to `NULL`
+- Removes invalid rows
+- Deletes accidental CSV header rows
+
+### Why it matters
+Recursive joins depend on exact string equality:
+
+- `"Ana"` ≠ `"Ana "`  
+- `""` must become `NULL`
+
+### Code
+```sql
+UPDATE employees
+SET employee_name = TRIM(employee_name),
+    manager_name  = NULLIF(TRIM(manager_name), '');
+
+DELETE FROM employees
+WHERE employee_name IS NULL OR employee_name = '';
+
+DELETE FROM employees
+WHERE employee_name = 'Employee Name' 
+  AND manager_name = 'Manager Name';
+🔹 Phase 1 — Build Hierarchy (Recursive CTE)
+🎯 Purpose
+
+Construct a full reporting path from top manager to each employee.
+
+Recursive Structure
+
+A recursive CTE has two parts:
+
+1️⃣ Anchor (Root Nodes)
+
+Start from top-level employees:
+
+WHERE manager_name IS NULL
+
+Each root starts with:
+
+employee_name AS reporting_hierarchy
+lvl = 0
+2️⃣ Recursive Step
+
+Join employees whose manager already exists in the hierarchy:
+
+JOIN heir h
+  ON e.manager_name = h.employee_name
+
+Extend the hierarchy string:
+
+CONCAT(h.reporting_hierarchy, ' > ', e.employee_name)
+
+Increase depth:
+
+h.lvl + 1
+🛡 Recursion Safety Guard
+WHERE h.lvl < 100
+
+Prevents infinite loops if bad data creates circular references.
+
+🔹 Phase 2 — Direct Reports
+🎯 Purpose
+
+Count immediate reports for each manager.
+
+Logic
+
+Each employee row contributes +1 to their manager.
+
+SELECT
+    manager_name AS employee_name,
+    COUNT(*) AS direct_reports
+FROM employees
+WHERE manager_name IS NOT NULL
+GROUP BY manager_name;
+Key Detail
+
+Uses LEFT JOIN later to preserve employees with 0 reports.
+
+COALESCE(..., 0) ensures nulls become zeros.
+
+🔹 Phase 3 — Consolidation
+
+Combine hierarchy + direct reports:
+
+COALESCE(d.direct_reports, 0) AS direct_reports
+
+This produces a clean intermediate dataset:
+
+| employee | manager | reporting_hierarchy | direct_reports |
+
+🔹 Phase 4 — Total Reports (Direct + Indirect)
+🎯 Purpose
+
+Count all descendants of each employee.
+
+Key Insight
+
+If:
+
+m.reporting_hierarchy = CEO > VP A
+
+Then descendants are all rows starting with:
+
+CEO > VP A >
+Condition Used
+e.reporting_hierarchy LIKE 
+    CONCAT(m.reporting_hierarchy, ' > %')
+Why This Works
+
+Because every descendant path begins with its ancestor’s path.
+
+🏁 Final Query
+SELECT
+    m.employee_name,
+    m.manager_name,
+    m.reporting_hierarchy,
+    m.direct_reports,
+    COUNT(e.employee_name) AS total_reports
+FROM hier_direct m
+LEFT JOIN hier_direct e
+  ON e.reporting_hierarchy LIKE CONCAT(m.reporting_hierarchy, ' > %')
+GROUP BY
+    m.employee_name,
+    m.manager_name,
+    m.reporting_hierarchy,
+    m.direct_reports
+ORDER BY total_reports DESC, m.employee_name;
+📊 Example Output
+employee_name	reporting_hierarchy	direct_reports	total_reports
+Maria	Maria	2	5
+Ana	Maria > Ana	1	2
+John	Maria > Ana > John	0	0
+🧪 Validation Checks
+
+To ensure correctness:
+
+total_reports >= direct_reports
+
+Leaf nodes → both values = 0
+
+Top-level employees → manager_name IS NULL
+
+Managers must appear in raw data as manager_name
+
+⚙️ Technical Assumptions
+
+MariaDB 10.2+
+
+One manager per employee
+
+Employee names are unique
+
+Hierarchy depth < 100 levels
+
+🚀 Production Improvements (Advanced Discussion)
+
+For enterprise-scale systems:
+
+Use employee_id instead of names
+
+Implement cycle detection logic
+
+Replace LIKE approach with closure tables
+
+Materialize hierarchy in a view for BI tools
+
+Add indexing on manager_name
+
+💡 Why This Matters (Business Perspective)
+
+This transformation enables:
+
+Span-of-control analysis
+
+Org depth analysis
+
+Manager workload evaluation
+
+HR analytics dashboards
+
+BI reporting integration
+
+🧩 Full Solution (Complete Script)
+/* =======================================================
+   Org Chart Overhaul — SQL Solution (MariaDB 10.4)
+======================================================= */
+
+UPDATE employees
+SET employee_name = TRIM(employee_name),
+    manager_name  = NULLIF(TRIM(manager_name), '');
+
+DELETE FROM employees
+WHERE employee_name IS NULL OR employee_name = '';
+
+DELETE FROM employees
+WHERE employee_name = 'Employee Name' 
+  AND manager_name = 'Manager Name';
+
+WITH RECURSIVE heir AS (
+    SELECT
+        employee_name,
+        manager_name,
+        employee_name AS reporting_hierarchy,
+        0 AS lvl
+    FROM employees
+    WHERE manager_name IS NULL
+
+    UNION ALL
+
+    SELECT
+        e.employee_name,
+        e.manager_name,
+        CONCAT(h.reporting_hierarchy, ' > ', e.employee_name),
+        h.lvl + 1
+    FROM employees e
+    JOIN heir h
+      ON e.manager_name = h.employee_name
+    WHERE h.lvl < 100
+),
+direct AS (
+    SELECT
+        manager_name AS employee_name,
+        COUNT(*) AS direct_reports
+    FROM employees
+    WHERE manager_name IS NOT NULL
+    GROUP BY manager_name
+),
+hier_direct AS (
+    SELECT
+        h.employee_name,
+        h.manager_name,
+        h.reporting_hierarchy,
+        COALESCE(d.direct_reports, 0) AS direct_reports
+    FROM heir h
+    LEFT JOIN direct d
+      ON h.employee_name = d.employee_name
+)
+SELECT
+    m.employee_name,
+    m.manager_name,
+    m.reporting_hierarchy,
+    m.direct_reports,
+    COUNT(e.employee_name) AS total_reports
+FROM hier_direct m
+LEFT JOIN hier_direct e
+  ON e.reporting_hierarchy LIKE CONCAT(m.reporting_hierarchy, ' > %')
+GROUP BY
+    m.employee_name,
+    m.manager_name,
+    m.reporting_hierarchy,
+    m.direct_reports
+ORDER BY total_reports DESC, m.employee_name;
