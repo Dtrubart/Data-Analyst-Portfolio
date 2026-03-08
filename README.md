@@ -95,6 +95,38 @@ producing one row per nested item.
 
 ---
 
+### 📂 Data & Solutions
+
+#### 2.1 Raw Data
+- [OfficeSpace — Raw Employee/Manager Data](#)
+
+#### 2.2 Excel Formula Solution
+- 📄 Documentation:  
+  [1.2.1 Excel Formula Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/0463af6b26604a2d466393dc2a0a30d5cd135798/1.2.1%20Excel%20Formula%20Solution%20Doc)
+- 📊 Excel File:  
+  [1.2.2 Excel Formula Solution](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/eb7d5b22cf3ed93728a4a49f64e262714fdd3106/1.2.2%20Excel%20Solution%20Formula.xlsx)
+
+#### 2.3 Power BI – Power Query Solution
+- 📄 Documentation:  
+  [1.3.1 Power Query – Power BI Solution Doc](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d373f8b2ff64dd67b8d2a26ab92d3cd5f8032f48/1.3.1%20Power%20Query%20-%20Power%20Bi%20Solution%20Doc%20.md)
+- 📊 Power Query File:  
+  [1.3.2 Power Query Solution](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/eb7d5b22cf3ed93728a4a49f64e262714fdd3106/1.3.2%20Excel%20Solution%20Power%20Query.xlsx)
+
+#### 2.4 SQL Solution
+- 📄 Documentation:  
+  [1.4.1 SQL Solution Doc]( https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d373f8b2ff64dd67b8d2a26ab92d3cd5f8032f48/1.4.1%20SQL%20Solution%20Doc%20.md)
+- 🗄 SQL Script:  
+  [1.4.2 SQL Solution](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/96948b32f992dbed5ee3487e687e3a7450d0a378/1.4.2%20SQL%20Solution.sql)
+
+#### 2.5 Python Solution
+- 📄 Documentation:  
+  [1.5.1 Python Solution Doc]( https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/d373f8b2ff64dd67b8d2a26ab92d3cd5f8032f48/1.5.1%20Python%20Solution%20Doc%20.md)
+- 🐍 Python Script:  
+  [1.5.2 Python Solution](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/96948b32f992dbed5ee3487e687e3a7450d0a378/1.5.2%20Python%20Solution.py)
+
+
+---
+
 ## 3️⃣ Rolling Up, Looking Back
 
 ### Objective
