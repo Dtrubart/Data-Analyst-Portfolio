@@ -98,7 +98,7 @@ producing one row per nested item.
 ### 📂 Data & Solutions
 
 #### 2.1 Raw Data
-- [OfficeSpace — Raw Employee/Manager Data]()
+- [OfficeSpace — Raw Employee/Manager Data](https://github.com/Dtrubart/Data-Analyst-Portfolio/blob/65a38e8cd1087a238c1c637b3c3fceec650a7b51/README.md)
 
 #### 2.2 Excel Formula Solution
 - 📄 Documentation:  
